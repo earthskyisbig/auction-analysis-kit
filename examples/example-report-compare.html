@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏘️ 경매 3물건 비교분석 — 시흥동·호매실동·양주</title>
+  <style>
+    :root {
+      --bg:#fff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#e9ecef;
+      --text:#212529; --text-secondary:#6c757d;
+      --accent:#3b82f6; --accent-light:#eff6ff;
+      --green:#16a34a; --green-light:#f0fdf4;
+      --red:#dc2626; --red-light:#fef2f2;
+      --yellow:#d97706; --yellow-light:#fffbeb;
+      --purple:#7c3aed; --purple-light:#f5f3ff;
+      --nav-bg:#1e293b; --nav-text:#f1f5f9;
+      --radius:12px; --radius-sm:8px;
+      --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04);
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; font-size:15px; }
+    nav { background:var(--nav-bg); color:var(--nav-text); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.2); }
+    .nav-logo { font-size:16px; font-weight:700; color:var(--nav-text); text-decoration:none; display:flex; align-items:center; gap:6px; }
+    .nav-links { display:flex; gap:4px; list-style:none; }
+    .nav-links a { color:#94a3b8; text-decoration:none; font-size:13px; padding:6px 12px; border-radius:6px; }
+    .nav-links a:hover, .nav-links a.active { color:#f1f5f9; background:rgba(255,255,255,.1); }
+    .page-wrapper { max-width:920px; margin:0 auto; padding:32px 20px 80px; }
+    .article-header { margin-bottom:28px; }
+    .article-series { display:inline-flex; align-items:center; gap:6px; background:var(--purple-light); color:var(--purple); font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px; margin-bottom:14px; letter-spacing:.3px; }
+    .article-title { font-size:26px; font-weight:800; line-height:1.35; margin-bottom:8px; }
+    .article-subtitle { font-size:15px; color:var(--text-secondary); margin-bottom:16px; }
+    .article-meta { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-secondary); flex-wrap:wrap; }
+    .article-meta .dot { color:var(--border); }
+    .tag { display:inline-flex; align-items:center; background:var(--surface); border:1px solid var(--border); color:var(--text-secondary); font-size:11px; font-weight:500; padding:2px 8px; border-radius:20px; }
+
+    .result-banner { background:linear-gradient(135deg,#0f2027 0%,#203a43 50%,#0f2027 100%); border-radius:var(--radius); padding:24px 28px; margin-bottom:28px; }
+    .rb-title { font-size:12px; color:#60a5fa; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:16px; }
+    .verdict-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    @media(max-width:640px){ .verdict-grid { grid-template-columns:1fr; } }
+    .vc { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-sm); padding:16px; }
+    .vc .vc-rank { font-size:11px; color:#64748b; margin-bottom:4px; }
+    .vc .vc-name { font-size:15px; font-weight:700; color:#f1f5f9; margin-bottom:8px; }
+    .vc .vc-badge { display:inline-block; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+    .vc-badge.best { background:rgba(74,222,128,.15); color:#4ade80; }
+    .vc-badge.mid { background:rgba(96,165,250,.15); color:#60a5fa; }
+    .vc-badge.warn { background:rgba(251,191,36,.15); color:#fbbf24; }
+    .vc .vc-note { font-size:12px; color:#94a3b8; margin-top:8px; }
+
+    .section { margin-bottom:40px; }
+    .section-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; padding-bottom:10px; border-bottom:2px solid var(--border); }
+    .section-icon { font-size:20px; } .section-title { font-size:17px; font-weight:700; }
+
+    .cmp { width:100%; border-collapse:collapse; font-size:13px; border:1px solid var(--border); border-radius:var(--radius-sm); overflow:hidden; }
+    .cmp thead th { background:var(--nav-bg); color:#cbd5e1; font-weight:600; padding:12px 10px; text-align:center; font-size:12px; }
+    .cmp thead th:first-child { text-align:left; }
+    .cmp tbody th { background:var(--surface); color:var(--text-secondary); font-weight:600; font-size:12px; padding:10px; text-align:left; white-space:nowrap; }
+    .cmp tbody td { padding:10px; text-align:center; border-bottom:1px solid var(--border); border-left:1px solid var(--border); }
+    .cmp tbody tr:last-child td, .cmp tbody tr:last-child th { border-bottom:none; }
+    .cmp .best { background:rgba(22,163,74,.08); font-weight:700; color:var(--green); }
+    .cmp .bad { color:var(--red); }
+    .cmp .warn { color:var(--yellow); }
+    .cmp-col-name { font-weight:700; font-size:13px; }
+    .cmp-col-sub { font-size:11px; color:var(--text-secondary); font-weight:400; }
+    .table-scroll { overflow-x:auto; }
+
+    .callout { border-left:4px solid; padding:14px 18px; border-radius:0 var(--radius-sm) var(--radius-sm) 0; margin-bottom:14px; font-size:14px; line-height:1.6; }
+    .callout-blue { border-color:var(--accent); background:var(--accent-light); color:#1e40af; }
+    .callout-green { border-color:var(--green); background:var(--green-light); color:#166534; }
+    .callout-yellow { border-color:var(--yellow); background:var(--yellow-light); color:#92400e; }
+    .callout-purple { border-color:var(--purple); background:var(--purple-light); color:#4c1d95; }
+    .callout strong { font-weight:700; }
+
+    .card-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+    @media(max-width:760px){ .card-grid { grid-template-columns:1fr; } }
+    .pcard { border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+    .pcard .pc-tag { display:inline-block; font-size:11px; font-weight:700; padding:2px 10px; border-radius:20px; margin-bottom:10px; }
+    .pc-tag.a { background:var(--green-light); color:var(--green); }
+    .pc-tag.b { background:var(--accent-light); color:var(--accent); }
+    .pc-tag.c { background:var(--yellow-light); color:var(--yellow); }
+    .pcard .pc-name { font-size:15px; font-weight:700; margin-bottom:4px; }
+    .pcard .pc-loc { font-size:12px; color:var(--text-secondary); margin-bottom:12px; }
+    .pcard .pc-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; border-bottom:1px dashed var(--border); }
+    .pcard .pc-row:last-child { border-bottom:none; }
+    .pcard .pc-row .k { color:var(--text-secondary); }
+    .pcard .pc-row .v { font-weight:600; }
+    .pcard .pc-profit { margin-top:10px; padding:10px; background:var(--surface); border-radius:var(--radius-sm); font-size:13px; text-align:center; }
+    .pcard .pc-profit b { color:var(--green); font-size:15px; }
+
+    hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
+    .text-muted { color:var(--text-secondary); font-size:13px; }
+    .site-footer { background:var(--nav-bg); color:#64748b; text-align:center; font-size:12px; padding:20px; }
+    @media(max-width:560px){ .article-title{font-size:21px;} nav .nav-links{display:none;} }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">🏛️ 경매 Council</a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">비교분석</a></li>
+    <li><a href="#물건">물건개요</a></li>
+    <li><a href="#권리">권리·수익</a></li>
+    <li><a href="#결론">결론</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <header class="article-header">
+    <div class="article-series">📊 3물건 비교 분석 — 입찰 후보 스크리닝</div>
+    <h1 class="article-title">시흥동 빌라 vs 호매실 아파트 vs 양주 아파트<br>경매 3물건 투자 비교</h1>
+    <p class="article-subtitle">권리·시세·수익성 3축 비교로 입찰 우선순위 도출</p>
+    <div class="article-meta">
+      <span>📅 분석일: 2026-07-09</span>
+      <span class="dot">·</span>
+      <span class="tag">court-auction-detail</span>
+      <span class="tag">국토부 실거래</span>
+      <span class="tag">DuckDB</span>
+    </div>
+  </header>
+
+  <!-- 결론 배너 -->
+  <div class="result-banner">
+    <div class="rb-title">🎯 종합 우선순위</div>
+    <div class="verdict-grid">
+      <div class="vc">
+        <div class="vc-rank">1순위</div>
+        <div class="vc-name">양주푸르지오 902호</div>
+        <span class="vc-badge best">균형 우수</span>
+        <div class="vc-note">역세권 국민주택규모, 환금성·수익성 균형. 낙찰 2.2억↓ 관리가 관건.</div>
+      </div>
+      <div class="vc">
+        <div class="vc-rank">2순위</div>
+        <div class="vc-name">호매실지에스 104호</div>
+        <span class="vc-badge mid">조건부</span>
+        <div class="vc-note">대단지·초품아 우수하나 1층 + 경매경쟁 치열(낙찰가율 100%±). 3.5억↓만.</div>
+      </div>
+      <div class="vc">
+        <div class="vc-rank">3순위</div>
+        <div class="vc-name">시흥동 해비치빌 504호</div>
+        <span class="vc-badge warn">마진 얇음</span>
+        <div class="vc-note">빌라라 환금성↓, 감정가=시세로 할인 메리트 작음. 최저가 근처만.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 핵심 비교표 -->
+  <div class="section" id="물건">
+    <div class="section-header"><span class="section-icon">📋</span><span class="section-title">1. 핵심 지표 비교</span></div>
+    <div class="table-scroll">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>항목</th>
+          <th><div class="cmp-col-name">시흥동 해비치빌</div><div class="cmp-col-sub">2025타경580 · 빌라</div></th>
+          <th><div class="cmp-col-name">호매실지에스</div><div class="cmp-col-sub">2025타경55979 · 아파트</div></th>
+          <th><div class="cmp-col-name">양주푸르지오</div><div class="cmp-col-sub">2025타경72795 · 아파트</div></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><th>소재지</th><td>금천구 시흥동</td><td>수원 권선구 호매실동</td><td>양주 덕계동</td></tr>
+        <tr><th>유형 / 면적</th><td>다세대 38.97㎡</td><td class="best">아파트 84.92㎡</td><td class="best">아파트 84.91㎡</td></tr>
+        <tr><th>준공 / 층</th><td>—  / 5층</td><td>1998 / <span class="bad">1층</span></td><td class="best">2006 / 9층</td></tr>
+        <tr><th>규모</th><td>빌라</td><td class="best">1,754세대 대단지</td><td>단지형</td></tr>
+        <tr><th>감정가</th><td>3.00억</td><td>3.70억</td><td>2.73억</td></tr>
+        <tr><th>최저가(저감율)</th><td>2.40억(80%)</td><td class="best">2.59억(70%)</td><td class="best">1.91억(70%)</td></tr>
+        <tr><th>유찰</th><td>1회</td><td>1회</td><td>1회</td></tr>
+        <tr><th>매각기일</th><td>2026.07.22</td><td>2026.07.10</td><td>2026.07.16</td></tr>
+        <tr><th>입지</th><td>초·중 인근</td><td class="best">초품아·도서관·대단지</td><td class="best">덕계역 역세권</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- 권리 & 시세 & 수익 -->
+  <div class="section" id="권리">
+    <div class="section-header"><span class="section-icon">⚖️</span><span class="section-title">2. 권리 · 시세 · 수익 비교</span></div>
+    <div class="table-scroll">
+    <table class="cmp">
+      <thead>
+        <tr><th>항목</th><th>시흥동 해비치빌</th><th>호매실지에스</th><th>양주푸르지오</th></tr>
+      </thead>
+      <tbody>
+        <tr><th>말소기준</th><td>2017.07.24 근저당</td><td>2021.11.16 근저당</td><td>2017.02.16 근저당</td></tr>
+        <tr><th>임차인/인수</th><td class="best">없음 · 0원</td><td class="best">없음 · 0원</td><td class="best">없음 · 0원</td></tr>
+        <tr><th>점유/명도</th><td class="best">채무자가족·인도명령</td><td class="best">채무자·인도명령</td><td class="best">채무자·인도명령</td></tr>
+        <tr><th>실거래 시세(중립)</th><td>3.00억</td><td>4.0억(1층조정)</td><td>2.60억</td></tr>
+        <tr><th>감정가 vs 시세</th><td class="warn">동일(할인 작음)</td><td class="best">시세 &gt; 감정(할인 有)</td><td class="warn">감정 &gt; 시세(할인 작음)</td></tr>
+        <tr><th>동일단지 경매경쟁</th><td>—</td><td class="bad">낙찰가율 100%±(치열)</td><td>보통</td></tr>
+        <tr><th>권장 낙찰상한</th><td>2.50억</td><td>3.50억</td><td class="best">2.20억</td></tr>
+        <tr><th>예상 세전차익</th><td>+1,200만~4,900만</td><td>+1,200만~3,300만</td><td class="best">+1,800만~2,900만</td></tr>
+        <tr><th>특이 리스크</th><td class="bad">토지거래허가구역</td><td class="warn">1층·구축(1998)</td><td class="warn">감정가 후함</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="text-muted" style="margin-top:10px;">※ 세전차익은 권장 낙찰상한 이하 낙찰 + 중립 매도시세 기준. 모두 유찰1회 70~80% 상태. 세금(양도세/종소세)·보유비용 별도.</p>
+  </div>
+
+  <!-- 물건별 카드 -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🏠</span><span class="section-title">3. 물건별 요약</span></div>
+    <div class="card-grid">
+      <div class="pcard">
+        <span class="pc-tag a">1순위</span>
+        <div class="pc-name">양주푸르지오 902호</div>
+        <div class="pc-loc">양주 덕계동 · 84.91㎡ · 9층 · 2006</div>
+        <div class="pc-row"><span class="k">최저가</span><span class="v">1.91억</span></div>
+        <div class="pc-row"><span class="k">시세(중립)</span><span class="v">2.60억</span></div>
+        <div class="pc-row"><span class="k">낙찰상한</span><span class="v">2.20억</span></div>
+        <div class="pc-profit">낙찰 2.1억 시 세전 <b>+2,900만</b></div>
+      </div>
+      <div class="pcard">
+        <span class="pc-tag b">2순위</span>
+        <div class="pc-name">호매실지에스 104호</div>
+        <div class="pc-loc">수원 호매실동 · 84.92㎡ · 1층 · 1998</div>
+        <div class="pc-row"><span class="k">최저가</span><span class="v">2.59억</span></div>
+        <div class="pc-row"><span class="k">시세(중립)</span><span class="v">4.0억(1층)</span></div>
+        <div class="pc-row"><span class="k">낙찰상한</span><span class="v">3.50억</span></div>
+        <div class="pc-profit">낙찰 3.3억 시 세전 <b>+3,300만</b></div>
+      </div>
+      <div class="pcard">
+        <span class="pc-tag c">3순위</span>
+        <div class="pc-name">시흥동 해비치빌 504호</div>
+        <div class="pc-loc">금천구 시흥동 · 38.97㎡ · 5층 · 빌라</div>
+        <div class="pc-row"><span class="k">최저가</span><span class="v">2.40억</span></div>
+        <div class="pc-row"><span class="k">시세(중립)</span><span class="v">3.00억</span></div>
+        <div class="pc-row"><span class="k">낙찰상한</span><span class="v">2.50억</span></div>
+        <div class="pc-profit">낙찰 2.4억 시 세전 <b>+4,900만</b></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 결론 -->
+  <div class="section" id="결론">
+    <div class="section-header"><span class="section-icon">🎯</span><span class="section-title">4. 종합 결론</span></div>
+    <div class="callout callout-green">
+      🥇 <strong>1순위 — 양주푸르지오(902호)</strong>: 셋 중 유일하게 <strong>역세권 + 국민주택규모 + 중고층(9층)</strong>을 모두 갖춰 환금성·수익성 균형이 가장 좋다. 비조정지역이라 매매사업자 단기매도 패턴에도 부합. 단, 감정가(2.73)가 실거래 중앙값(2.60)보다 높으니 <strong>낙찰 2.2억 이하</strong>가 필수.
+    </div>
+    <div class="callout callout-blue">
+      🥈 <strong>2순위 — 호매실지에스(104호)</strong>: 대단지·초품아로 입지 최고이고 시세(4.0억)가 감정(3.7억)보다 높아 할인 여지도 크다. 그러나 <strong>1층</strong>이고 동일단지 경매 낙찰가율이 100%를 넘나들 만큼 <strong>경쟁이 치열</strong>해 낮은 낙찰이 어렵다. 3.5억 이하 낙찰 시에만 유효.
+    </div>
+    <div class="callout callout-yellow">
+      🥉 <strong>3순위 — 시흥동 해비치빌(504호)</strong>: 최저가 낙찰 시 절대 차익(+4,900만)은 가장 크지만, <strong>빌라라 환금성이 낮고</strong> 감정가=시세라 경매 메리트가 작다. 게다가 <strong>토지거래허가구역</strong>(외국인 대상) 리스크. 서울 소재라 보유가치는 있으나 단기매도엔 불리.
+    </div>
+    <div class="callout callout-purple">
+      💡 <strong>공통 확인사항</strong>: 3건 모두 권리는 안전(임차인 없음·인수 0원·인도명령 대상). 입찰 전 ①등기부 총 근저당 ②관리비 체납 ③현장 실매물 호가 ④수리상태를 반드시 확인. 세 물건 모두 <strong>낙찰가 관리가 수익의 핵심</strong>이며, 권장 상한을 넘기면 마진이 급감한다.
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🔧</span><span class="section-title">부록. 사용 리소스 &amp; 메트릭</span></div>
+    <p class="text-muted">
+      • 목록 수집: court-auction API 직접 페이징(collect_api.py, 정합성검증 통과) — 법원경매정보 courtauction.go.kr<br>
+      • 상세 분석: analyze_case.py(매각물건명세서·현황조사·감정평가·인근매각)<br>
+      • 시세: real-estate MCP 국토부 아파트/빌라 실거래(금천 11545·수원권선 41113·양주 41630, 2026.04~07)<br>
+      • 저장: DuckDB C:\Users\m9938\auction_crawling\auction.duckdb<br>
+      • 분석 소요: 약 40분 · 추정 토큰 ~250K · 추정비용 입력$3/출력$15 per 1M 기준 약 $2 (환율 1,400원 ≈ 2,800원)
+    </p>
+    <div class="callout callout-yellow" style="margin-top:14px;">
+      ⚠️ <strong>면책</strong>: 시세·수익률·낙찰가는 모두 <strong>추정</strong>입니다. 실제 입찰 전 등기사항증명서·전입세대열람·현장확인·세무상담으로 검증하세요. 본 분석은 2026-07-09 기준.
+    </div>
+  </div>
+
+  <div style="text-align:center; color:var(--text-secondary); font-size:12px; margin-top:36px;">
+    🏛️ 경매 Council · 3물건 비교분석 · 생성일 2026-07-09
+  </div>
+
+</div>
+
+<div class="site-footer">본 보고서는 투자 참고용이며, 최종 입찰 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다.</div>
+
+</body>
+</html>

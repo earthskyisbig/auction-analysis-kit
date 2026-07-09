@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏠 경매 분석 #2025타경580 — 시흥동 해비치빌 [입찰검토]</title>
+  <style>
+    :root {
+      --bg: #ffffff; --surface: #f8f9fa; --surface2: #f1f3f5; --border: #e9ecef;
+      --text: #212529; --text-secondary: #6c757d;
+      --accent: #3b82f6; --accent-light: #eff6ff;
+      --green: #16a34a; --green-light: #f0fdf4;
+      --red: #dc2626; --red-light: #fef2f2;
+      --yellow: #d97706; --yellow-light: #fffbeb;
+      --purple: #7c3aed; --purple-light: #f5f3ff;
+      --orange: #ea580c; --orange-light: #fff7ed;
+      --nav-bg: #1e293b; --nav-text: #f1f5f9;
+      --radius: 12px; --radius-sm: 8px;
+      --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; font-size: 15px; }
+    nav { background: var(--nav-bg); color: var(--nav-text); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 8px rgba(0,0,0,.2); }
+    .nav-logo { font-size: 16px; font-weight: 700; color: var(--nav-text); text-decoration: none; display: flex; align-items: center; gap: 6px; }
+    .nav-links { display: flex; gap: 4px; list-style: none; }
+    .nav-links a { color: #94a3b8; text-decoration: none; font-size: 13px; padding: 6px 12px; border-radius: 6px; transition: all .15s; }
+    .nav-links a:hover, .nav-links a.active { color: #f1f5f9; background: rgba(255,255,255,.1); }
+    .page-wrapper { max-width: 800px; margin: 0 auto; padding: 32px 20px 80px; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; color: var(--text-secondary); text-decoration: none; font-size: 13px; margin-bottom: 24px; }
+    .article-header { margin-bottom: 28px; }
+    .article-series { display: inline-flex; align-items: center; gap: 6px; background: var(--accent-light); color: var(--accent); font-size: 12px; font-weight: 600; padding: 4px 12px; border-radius: 20px; margin-bottom: 14px; letter-spacing: .3px; }
+    .article-title { font-size: 26px; font-weight: 800; line-height: 1.35; color: var(--text); margin-bottom: 8px; }
+    .article-subtitle { font-size: 15px; color: var(--text-secondary); margin-bottom: 16px; }
+    .article-meta { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); flex-wrap: wrap; }
+    .article-meta .dot { color: var(--border); }
+    .tag { display: inline-flex; align-items: center; background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary); font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; }
+    .tag-green { background: var(--green-light); border-color: #bbf7d0; color: var(--green); }
+    .tag-yellow { background: var(--yellow-light); border-color: #fde68a; color: var(--yellow); }
+    .tag-red { background: var(--red-light); border-color: #fecaca; color: var(--red); }
+    .result-banner { background: linear-gradient(135deg, #0f2027 0%, #1a2a3a 50%, #0f2027 100%); border-radius: var(--radius); padding: 24px 28px; margin-bottom: 28px; }
+    .result-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media(max-width:600px) { .result-grid { grid-template-columns: repeat(2, 1fr); } }
+    .result-item .ri-label { font-size: 11px; color: #64748b; margin-bottom: 4px; }
+    .result-item .ri-value { font-size: 20px; font-weight: 800; color: #f1f5f9; }
+    .result-item .ri-sub { font-size: 11px; color: #94a3b8; margin-top: 2px; }
+    .result-item .ri-value.green { color: #4ade80; }
+    .result-item .ri-value.blue { color: #60a5fa; }
+    .result-item .ri-value.yellow { color: #fbbf24; }
+    .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+    @media(max-width:560px) { .summary-grid { grid-template-columns: 1fr 1fr; } }
+    .summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
+    .summary-card .sc-label { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
+    .summary-card .sc-value { font-size: 18px; font-weight: 700; color: var(--text); }
+    .summary-card .sc-sub { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .summary-card.accent { background: var(--accent-light); border-color: #bfdbfe; } .summary-card.accent .sc-value { color: var(--accent); }
+    .summary-card.green { background: var(--green-light); border-color: #bbf7d0; } .summary-card.green .sc-value { color: var(--green); }
+    .summary-card.yellow { background: var(--yellow-light); border-color: #fde68a; } .summary-card.yellow .sc-value { color: var(--yellow); }
+    .summary-card.red { background: var(--red-light); border-color: #fecaca; } .summary-card.red .sc-value { color: var(--red); }
+    .section { margin-bottom: 40px; }
+    .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+    .section-icon { font-size: 20px; }
+    .section-title { font-size: 17px; font-weight: 700; }
+    .section-badge { font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 20px; margin-left: auto; }
+    .badge-safe { background: var(--green-light); color: var(--green); }
+    .badge-warn { background: var(--yellow-light); color: var(--yellow); }
+    .badge-danger { background: var(--red-light); color: var(--red); }
+    .badge-info { background: var(--accent-light); color: var(--accent); }
+    .info-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .info-table th, .info-table td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    .info-table th { background: var(--surface); color: var(--text-secondary); font-weight: 600; font-size: 12px; white-space: nowrap; width: 150px; }
+    .info-table tr:last-child th, .info-table tr:last-child td { border-bottom: none; }
+    .val-bold { font-weight: 700; } .val-accent { color: var(--accent); font-weight: 600; } .val-red { color: var(--red); font-weight: 600; } .val-green { color: var(--green); font-weight: 600; } .val-muted { color: var(--text-secondary); font-size: 13px; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .data-table thead th { background: var(--nav-bg); color: #cbd5e1; font-weight: 600; padding: 10px 12px; text-align: center; font-size: 12px; }
+    .data-table tbody td { padding: 10px 12px; text-align: center; border-bottom: 1px solid var(--border); }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+    .data-table tbody tr:hover { background: var(--surface); }
+    .td-left { text-align: left !important; } .td-bold { font-weight: 700; } .td-accent { color: var(--accent); font-weight: 600; } .td-red { color: var(--red); font-weight: 600; } .td-green { color: var(--green); font-weight: 600; } .td-muted { color: var(--text-secondary); font-size: 12px; }
+    .td-highlight { background: rgba(59,130,246,.07) !important; font-weight: 700; }
+    .timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 28px; }
+    .timeline::before { content: ''; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 2px; background: var(--border); }
+    .tl-item { position: relative; padding: 0 0 20px 16px; }
+    .tl-item:last-child { padding-bottom: 0; }
+    .tl-dot { position: absolute; left: -18px; top: 5px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); background: var(--bg); }
+    .tl-dot.done { background: var(--green); border-color: var(--green); }
+    .tl-dot.fail { background: var(--yellow); border-color: var(--yellow); }
+    .tl-dot.next { background: var(--accent); border-color: var(--accent); }
+    .tl-date { font-size: 11px; color: var(--text-secondary); margin-bottom: 2px; }
+    .tl-content { font-size: 14px; font-weight: 600; color: var(--text); }
+    .tl-detail { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .rights-row { display: grid; grid-template-columns: 60px 1fr 130px 80px; gap: 0; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 8px; font-size: 13px; }
+    .rights-row > div { padding: 10px 12px; border-right: 1px solid var(--border); }
+    .rights-row > div:last-child { border-right: none; }
+    .rr-no { background: var(--surface); font-weight: 700; font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; }
+    .rr-type { font-size: 11px; font-weight: 600; color: var(--text-secondary); margin-bottom: 2px; }
+    .rr-name { font-weight: 600; }
+    .rr-date { font-size: 11px; color: var(--text-secondary); }
+    .rr-amount { display: flex; align-items: center; font-weight: 600; font-size: 13px; }
+    .rr-status { display: flex; align-items: center; justify-content: center; }
+    .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; }
+    .pill-red { background: var(--red-light); color: var(--red); }
+    .pill-green { background: var(--green-light); color: var(--green); }
+    .pill-blue { background: var(--accent-light); color: var(--accent); }
+    .pill-gray { background: var(--surface); color: var(--text-secondary); border: 1px solid var(--border); }
+    .callout { border-left: 4px solid; padding: 14px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+    .callout-blue { border-color: var(--accent); background: var(--accent-light); color: #1e40af; }
+    .callout-green { border-color: var(--green); background: var(--green-light); color: #166534; }
+    .callout-yellow { border-color: var(--yellow); background: var(--yellow-light); color: #92400e; }
+    .callout-red { border-color: var(--red); background: var(--red-light); color: #991b1b; }
+    .callout-purple { border-color: #7c3aed; background: var(--purple-light); color: #4c1d95; }
+    .callout strong { font-weight: 700; }
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .checklist li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; }
+    .check-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: hidden; }
+    .compare-table th { background: var(--nav-bg); color: #cbd5e1; padding: 10px 14px; font-size: 12px; }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: center; }
+    .compare-table td:first-child { text-align: left; font-weight: 500; }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table tr.total-row td { background: #eff6ff; font-weight: 700; }
+    .profit-box { background: linear-gradient(135deg, #0f2027 0%, #1a2a3a 100%); border-radius: var(--radius); padding: 24px 28px; margin: 16px 0; }
+    .profit-box .pb-label { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .8px; margin-bottom: 6px; }
+    .profit-box .pb-main { font-size: 32px; font-weight: 800; color: #60a5fa; margin-bottom: 4px; }
+    .profit-box .pb-sub { font-size: 13px; color: #94a3b8; }
+    .profit-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    @media(max-width:560px) { .profit-row { grid-template-columns: 1fr 1fr; } }
+    .council-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 12px; }
+    .council-card .cc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .council-card .cc-name { font-size: 15px; font-weight: 700; }
+    .council-card .cc-result { margin-left: auto; font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 20px; }
+    .cc-result.good { background: var(--green-light); color: var(--green); }
+    .cc-result.warn { background: var(--yellow-light); color: var(--yellow); }
+    .cc-result.bad { background: var(--red-light); color: var(--red); }
+    .council-card .cc-body { font-size: 14px; color: var(--text); }
+    .council-card .cc-lesson { margin-top: 10px; padding: 10px 14px; background: var(--surface); border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary); border-left: 3px solid var(--border); }
+    .council-card .cc-lesson strong { color: var(--text); }
+    hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+    .site-footer { background: var(--nav-bg); color: #64748b; text-align: center; font-size: 12px; padding: 20px; }
+    .text-muted { color: var(--text-secondary); font-size: 13px; }
+    @media(max-width:560px) { .article-title { font-size: 21px; } nav .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">🏛️ 경매 Council</a>
+  <ul class="nav-links">
+    <li><a href="#物件">물건분석</a></li>
+    <li><a href="#권리">권리분석</a></li>
+    <li><a href="#시세">시세분석</a></li>
+    <li><a href="#수익" class="active">수익분석</a></li>
+    <li><a href="#판단">입찰판단</a></li>
+  </ul>
+</nav>
+
+<div class="page-wrapper">
+
+  <a class="back-link" href="#">← 금천구 다세대 물건 목록으로</a>
+
+  <!-- 헤더 -->
+  <header class="article-header">
+    <div class="article-series">🔍 입찰 전 실사 — 상세 분석 보고서</div>
+    <h1 class="article-title">시흥동 해비치빌 504호<br>경매 입찰 검토 보고서</h1>
+    <p class="article-subtitle">서울특별시 금천구 시흥동 173-19 해비치빌 · 전용 38.97㎡ · 5층 · 다세대주택</p>
+    <div class="article-meta">
+      <span>📅 사건번호: 2025타경580</span>
+      <span class="dot">·</span>
+      <span>⚖️ 서울남부지법 경매14계</span>
+      <span class="dot">·</span>
+      <span class="tag tag-green">권리안전</span>
+      <span class="tag tag-yellow">마진얇음</span>
+      <span class="tag tag-red">토지거래허가구역</span>
+      <span class="tag">분석일: 2026-07-09</span>
+    </div>
+  </header>
+
+  <!-- 결과 배너 -->
+  <div class="result-banner">
+    <div style="font-size:12px; color:#60a5fa; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:16px;">🎯 핵심 지표 요약</div>
+    <div class="result-grid">
+      <div class="result-item"><div class="ri-label">감정가</div><div class="ri-value">3.00억</div><div class="ri-sub">2026.04 감정</div></div>
+      <div class="result-item"><div class="ri-label">최저매각가</div><div class="ri-value blue">2.40억</div><div class="ri-sub">80% · 유찰 1회</div></div>
+      <div class="result-item"><div class="ri-label">추정 시세</div><div class="ri-value">3.00억</div><div class="ri-sub">중립 (실거래 기준)</div></div>
+      <div class="result-item"><div class="ri-label">인수 위험</div><div class="ri-value green">0원</div><div class="ri-sub">대항력 임차인 없음</div></div>
+    </div>
+  </div>
+
+  <!-- 고객 요구조건 -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">📋</span><span class="section-title">고객 요구조건</span></div>
+    <table class="info-table">
+      <tr><th>투자지역</th><td>서울 금천구 시흥동</td></tr>
+      <tr><th>물건유형</th><td>다세대주택 (빌라)</td></tr>
+      <tr><th>검색조건</th><td>유찰 1회 이상 · 최저가 4억 이하</td></tr>
+      <tr><th>취득구조</th><td><span class="val-muted">미지정 — 개인/매매사업자/법인별 세금 시나리오 병기</span></td></tr>
+      <tr><th>투자목적</th><td><span class="val-muted">미지정 — 단기매도·장기보유 양쪽 검토</span></td></tr>
+    </table>
+  </div>
+
+  <!-- 물건 개요 -->
+  <div class="section" id="物件">
+    <div class="section-header"><span class="section-icon">🏠</span><span class="section-title">1. 물건 개요</span><span class="section-badge badge-info">입찰검토</span></div>
+    <div class="summary-grid">
+      <div class="summary-card"><div class="sc-label">전용면적</div><div class="sc-value">38.97㎡</div><div class="sc-sub">약 11.8평 · 철근콘크리트</div></div>
+      <div class="summary-card"><div class="sc-label">매각기일</div><div class="sc-value">07.22</div><div class="sc-sub">2026년 · 제112호 법정</div></div>
+      <div class="summary-card"><div class="sc-label">매각결정기일</div><div class="sc-value">07.29</div><div class="sc-sub">보증금률 10%</div></div>
+    </div>
+    <table class="info-table">
+      <tr><th>소재지</th><td class="val-bold">서울특별시 금천구 시흥동 173-19 해비치빌 제5층 제504호</td></tr>
+      <tr><th>사건명</th><td>부동산임의경매</td></tr>
+      <tr><th>사건접수 / 개시결정</th><td>2025.06.24 / 2025.09.02</td></tr>
+      <tr><th>배당요구종기</th><td>2025.12.04</td></tr>
+      <tr><th>청구금액</th><td><span class="val-accent">110,312,402원</span> <span class="val-muted">(신청채권자 청구액 — 등기부 총채무 별도 확인 필요)</span></td></tr>
+      <tr><th>입지</th><td>시흥초등학교 남동측 인근 · 2종일반주거지역 · 노선버스 정류장 인근</td></tr>
+    </table>
+  </div>
+
+  <!-- 기일 내역 타임라인 -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🗓️</span><span class="section-title">2. 매각 기일 내역</span></div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot fail"></div><div class="tl-date">2026.06.04 10:00</div><div class="tl-content">1차 매각기일 — 3.00억</div><div class="tl-detail">유찰 (→ 최저가 20% 저감)</div></div>
+      <div class="tl-item"><div class="tl-dot next"></div><div class="tl-date">2026.07.22 10:00</div><div class="tl-content">2차 매각기일 — 2.40억 (최저가)</div><div class="tl-detail">현재 입찰 대상 · 제112호 법정</div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">2026.07.29 14:00</div><div class="tl-content">매각결정기일</div><div class="tl-detail">낙찰 후 이의 없으면 확정</div></div>
+    </div>
+  </div>
+
+  <!-- 권리분석 -->
+  <div class="section" id="권리">
+    <div class="section-header"><span class="section-icon">⚖️</span><span class="section-title">3. 권리분석</span><span class="section-badge badge-safe">인수위험 낮음</span></div>
+    <div class="rights-row">
+      <div class="rr-no">기준</div>
+      <div><div class="rr-type">말소기준권리 · 근저당권</div><div class="rr-name">최선순위 설정</div><div class="rr-date">2017.07.24</div></div>
+      <div class="rr-amount">—</div>
+      <div class="rr-status"><span class="pill pill-blue">기준</span></div>
+    </div>
+    <div class="rights-row">
+      <div class="rr-no">임차</div>
+      <div><div class="rr-type">매각물건명세서 기준</div><div class="rr-name">신고 임차인 없음</div><div class="rr-date">명세서 작성일 2026.04.22</div></div>
+      <div class="rr-amount">인수 0원</div>
+      <div class="rr-status"><span class="pill pill-green">안전</span></div>
+    </div>
+    <div class="rights-row">
+      <div class="rr-no">점유</div>
+      <div><div class="rr-type">현황조사서</div><div class="rr-name">채무자 겸 소유자 가족 점유</div><div class="rr-date">인도명령 대상</div></div>
+      <div class="rr-amount">—</div>
+      <div class="rr-status"><span class="pill pill-green">수월</span></div>
+    </div>
+
+    <div class="callout callout-green mt-16">
+      ✅ <strong>매각물건명세서상 임차인 없음</strong> → 최선순위 근저당(2017.07.24)이 말소기준. 대항력 인수 임차인이 없어 <strong>인수보증금 0원</strong>. 채무자 겸 소유자 가족이 점유 중이라 인도명령 대상(잔금납부 6개월 내)으로 명도 난이도 낮음.
+    </div>
+    <div class="callout callout-yellow">
+      ⚠️ <strong>현황조사서 vs 명세서 불일치</strong> — 현황조사서에는 외국인체류확인서 등재자 3명을 "일응 임차인"으로 등재(보증금·전입일 전부 공란). 명세서는 "임차인 없음"으로 확정했으나, <strong>전입세대열람 + 외국인등록 사실증명</strong>으로 실제 임차인 여부를 반드시 재확인.
+    </div>
+    <div class="callout callout-red">
+      🚨 <strong>등기부 총채무 미확인</strong> — 청구금액 1.1억은 신청채권자 몫일 뿐. 감정가 3억 대비 소액이므로 <strong>등기사항전부증명서로 근저당·가압류 등 총 채무를 확인</strong>해야 정확한 권리관계가 잡힘.
+    </div>
+  </div>
+
+  <!-- 시세분석 -->
+  <div class="section" id="시세">
+    <div class="section-header"><span class="section-icon">📊</span><span class="section-title">4. 실거래 시세 분석</span><span class="section-badge badge-info">국토부 실거래</span></div>
+    <p class="text-muted" style="margin-bottom:12px;">시흥동 다세대 중 유사 면적(36~42㎡)·유사 연식 실거래 (최근 3개월, 2026.04~06)</p>
+    <table class="data-table">
+      <thead><tr><th>단지</th><th>면적</th><th>준공</th><th>실거래가</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr class="td-highlight"><td class="td-left td-bold">비호쉐르빌</td><td>39.34㎡</td><td>2013</td><td class="td-accent">3.25~3.28억</td><td class="td-muted">크기 최적매칭·다건</td></tr>
+        <tr><td class="td-left">가온빌리지</td><td>40.76㎡</td><td>2022</td><td>3.55억</td><td class="td-muted">신축</td></tr>
+        <tr><td class="td-left">선경자이빌</td><td>36.00㎡</td><td>2014</td><td>2.90억</td><td class="td-muted"></td></tr>
+        <tr><td class="td-left">원창아트빌Ⅲ</td><td>41.09㎡</td><td>2021</td><td>2.85억</td><td class="td-muted"></td></tr>
+        <tr><td class="td-left">금강파크빌</td><td>42.57㎡</td><td>2019</td><td>2.79억</td><td class="td-muted"></td></tr>
+        <tr><td class="td-left">에스엠파크빌</td><td>42.61㎡</td><td>2013</td><td>2.70억</td><td class="td-muted"></td></tr>
+        <tr><td class="td-left">신한렉슬</td><td>37.58㎡</td><td>2017</td><td>2.60억</td><td class="td-muted"></td></tr>
+      </tbody>
+    </table>
+    <div class="summary-grid mt-16">
+      <div class="summary-card"><div class="sc-label">보수적</div><div class="sc-value">2.80억</div></div>
+      <div class="summary-card accent"><div class="sc-label">중립</div><div class="sc-value">3.00억</div></div>
+      <div class="summary-card green"><div class="sc-label">낙관</div><div class="sc-value">3.20억</div></div>
+    </div>
+    <div class="callout callout-yellow mt-16">
+      ⚠️ <strong>핵심 인사이트</strong>: 감정가 3.00억이 실거래 중립 시세와 거의 같음 → <strong>경매 특유의 "시세 대비 할인" 메리트가 크지 않음.</strong> 최저가(2.40억) 근처로 낮게 받아야만 수익 구조가 성립.
+    </div>
+  </div>
+
+  <!-- 수익분석 -->
+  <div class="section" id="수익">
+    <div class="section-header"><span class="section-icon">💰</span><span class="section-title">5. 낙찰가 시나리오별 수익 분석</span><span class="section-badge badge-warn">마진 얇음</span></div>
+    <p class="text-muted" style="margin-bottom:12px;">시흥동 다세대 평균 매각가율 77% · 유찰1회(2차) → 예상 낙찰가 2.4~2.6억 / 매도 시세 중립 3.00억 기준 · 8대 필수비용 반영</p>
+    <table class="compare-table">
+      <thead><tr><th>항목</th><th>①낙찰 2.40억</th><th>②낙찰 2.50억</th><th>③낙찰 2.60억</th></tr></thead>
+      <tbody>
+        <tr><td>낙찰가</td><td>240,000,000</td><td>250,000,000</td><td>260,000,000</td></tr>
+        <tr><td>① 취득세 (1.1%)</td><td>2,640,000</td><td>2,750,000</td><td>2,860,000</td></tr>
+        <tr><td>② 법무사비</td><td>600,000</td><td>600,000</td><td>600,000</td></tr>
+        <tr><td>③ 체납관리비 (추정)</td><td>1,000,000</td><td>1,000,000</td><td>1,000,000</td></tr>
+        <tr><td>④ 명도비 (11.8평)</td><td>1,200,000</td><td>1,200,000</td><td>1,200,000</td></tr>
+        <tr><td>⑤ 수리비 (도배·장판 등 추정)</td><td>5,000,000</td><td>5,000,000</td><td>5,000,000</td></tr>
+        <tr><td>⑥ 이자비용 (대출없음 가정)</td><td>0</td><td>0</td><td>0</td></tr>
+        <tr><td>⑦ 중개보수 (매도 0.4%)</td><td>1,200,000</td><td>1,200,000</td><td>1,200,000</td></tr>
+        <tr class="total-row"><td>총취득원가</td><td>250,640,000</td><td>261,750,000</td><td>271,860,000</td></tr>
+        <tr><td>매도가 (중립 3.00억)</td><td>300,000,000</td><td>300,000,000</td><td>300,000,000</td></tr>
+        <tr class="total-row"><td>세전 차익</td><td class="td-green">약 4,940만</td><td class="td-green">약 3,830만</td><td class="td-green">약 2,810만</td></tr>
+      </tbody>
+    </table>
+
+    <div class="profit-box">
+      <div class="pb-label">최선 시나리오 (낙찰 2.40억 · 매도 3.00억)</div>
+      <div class="pb-main">세전 +4,940만</div>
+      <div class="pb-sub">단, ⑧ 양도세/종합소득세는 취득주체·보유기간에 따라 별도 (아래 참조)</div>
+      <div class="profit-row mt-16" style="margin-top:16px;">
+        <div><div class="ri-label" style="color:#64748b;font-size:11px;">총취득원가</div><div style="color:#f1f5f9;font-weight:700;font-size:18px;">2.51억</div></div>
+        <div><div class="ri-label" style="color:#64748b;font-size:11px;">매도 시세</div><div style="color:#f1f5f9;font-weight:700;font-size:18px;">3.00억</div></div>
+        <div><div class="ri-label" style="color:#64748b;font-size:11px;">세전 ROI</div><div style="color:#60a5fa;font-weight:700;font-size:18px;">약 19.7%</div></div>
+      </div>
+    </div>
+
+    <div class="callout callout-blue mt-16">
+      ℹ️ <strong>⑧ 세금 — 취득주체·보유기간이 수익을 좌우</strong><br>
+      • <strong>개인 단기(1년 미만)</strong>: 주택 양도세율 70% → 세후 차익 급감. 단기 부적합.<br>
+      • <strong>개인 2년 이상 보유</strong>: 일반세율(6~45%)+장기보유공제. 자금 2년 묶임.<br>
+      • <strong>매매사업자 단기매도</strong>: 양도세 대신 종합소득세(사업소득, 대략 15~24% 구간). 단, <strong>서울 다세대</strong>는 기존 검증된 성공패턴(비수도권·비조정·85㎡이하)과 조건이 달라 단기매도 메리트가 상대적으로 약함.
+    </div>
+  </div>
+
+  <!-- Council 종합판단 -->
+  <div class="section" id="판단">
+    <div class="section-header"><span class="section-icon">🏛️</span><span class="section-title">6. Council 종합 판단</span></div>
+
+    <div class="council-card">
+      <div class="cc-header"><span class="cc-name">⚖️ 권리분석가</span><span class="cc-result good">GO</span></div>
+      <div class="cc-body">말소기준(2017.07.24 근저당) 명확, 명세서상 임차인 없음, 인수보증금 0원. 채무자 가족 점유로 인도명령 가능.</div>
+      <div class="cc-lesson"><strong>조건부:</strong> 등기부 총채무 + 전입세대열람(외국인 등재자 3명) 확인 완료 시에만 유효.</div>
+    </div>
+
+    <div class="council-card">
+      <div class="cc-header"><span class="cc-name">💰 수익분석가</span><span class="cc-result warn">조건부 GO</span></div>
+      <div class="cc-body">감정가=시세라 할인 메리트 얇음. 낙찰가 2.5억 초과 시 제비용 차감 후 남는 게 거의 없음. 최저가 2.4억 근처 낙찰 시에만 세전 ROI ~20% 확보.</div>
+      <div class="cc-lesson"><strong>입찰 상한선:</strong> 2.50억 이하 권고. 2.6억 이상은 비추천.</div>
+    </div>
+
+    <div class="council-card">
+      <div class="cc-header"><span class="cc-name">🚨 리스크판사</span><span class="cc-result warn">주의</span></div>
+      <div class="cc-body">토지거래허가구역(외국인 대상, 2025.8~2026.8) 지정. 낙찰자가 외국인이면 허가 이슈. 내부 수리상태 미확인 — 수리비가 얇은 마진을 좌우.</div>
+      <div class="cc-lesson"><strong>거부권 미발동:</strong> 국내 개인/사업자 입찰이면 토허구역 영향 제한적. 단 현장 임장 필수.</div>
+    </div>
+
+    <div class="callout callout-purple mt-16">
+      🎯 <strong>최종 결론: 조건부 입찰 (상한 2.50억)</strong><br>
+      권리는 깨끗하나 감정가=시세로 수익 마진이 얇은 물건. <strong>최저가(2.40억) 근처에서만 매력</strong>이 있으며, 2.5억을 넘기면 수익이 급격히 사라진다. 입찰 전 ①등기부 총채무 ②전입세대열람 ③토지거래허가 해당여부 ④내부 수리상태 현장확인이 모두 완료돼야 한다.
+    </div>
+  </div>
+
+  <!-- 입찰 전 체크리스트 -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">✅</span><span class="section-title">7. 입찰 전 필수 확인</span></div>
+    <ul class="checklist">
+      <li><span class="check-icon">🔲</span><span><strong>등기사항전부증명서</strong> — 근저당·가압류 등 총 채무 확인 (청구액 1.1억은 일부)</span></li>
+      <li><span class="check-icon">🔲</span><span><strong>전입세대열람 + 외국인등록 사실증명</strong> — 현황조사서 등재자 3명의 실제 대항력 여부</span></li>
+      <li><span class="check-icon">🔲</span><span><strong>토지거래허가구역</strong> — 입찰 주체(외국인 여부)에 따른 허가 필요성 확인</span></li>
+      <li><span class="check-icon">🔲</span><span><strong>관리비 체납</strong> — 관리사무소 확인 (다세대는 보통 소액이나 확인 필요)</span></li>
+      <li><span class="check-icon">🔲</span><span><strong>내부 수리상태 임장</strong> — 수리비가 얇은 마진을 좌우</span></li>
+      <li><span class="check-icon">🔲</span><span><strong>해비치빌 동일단지 실거래</strong> — 이 보고서 시세는 인근 유사물건 기준, 동일단지 사례 추가 확인</span></li>
+    </ul>
+  </div>
+
+  <hr>
+
+  <!-- 사용 리소스 & 분석 메트릭 -->
+  <div class="section">
+    <div class="section-header"><span class="section-icon">🔧</span><span class="section-title">부록. 사용 리소스 &amp; 분석 메트릭</span></div>
+    <table class="info-table">
+      <tr><th>목록 수집</th><td>court-auction-scraper (법원경매정보 courtauction.go.kr · Playwright)</td></tr>
+      <tr><th>상세 분석</th><td>court-auction-detail / analyze_case.py (매각물건명세서·현황조사·감정평가·인근매각)</td></tr>
+      <tr><th>시세 조회</th><td>real-estate MCP — 국토부 연립다세대 실거래가 (금천구 11545, 2026.04~07)</td></tr>
+      <tr><th>데이터 저장</th><td>DuckDB — C:\Users\m9938\auction_crawling\auction.duckdb</td></tr>
+      <tr><th>분석 소요시간</th><td>약 15분 (수집·상세분석·시세조회·보고서 작성)</td></tr>
+      <tr><th>추정 토큰 / 비용</th><td><span class="val-muted">약 90K tokens · 입력$3/출력$15 per 1M 기준 약 $0.6 (환율 1,400원 ≈ 840원)</span></td></tr>
+    </table>
+    <div class="callout callout-yellow mt-16">
+      ⚠️ <strong>면책</strong>: 본 보고서의 시세·수익률은 <strong>추정</strong>입니다. 예상낙찰가·인수금·명도난이도·세금은 반드시 등기사항증명서·전입세대열람·현장확인·세무상담으로 검증하세요. 매각물건명세서는 매각기일 1주 전부터 공개되며, 본 분석은 2026-07-09 기준입니다.
+    </div>
+  </div>
+
+  <div style="text-align:center; color:var(--text-secondary); font-size:12px; margin-top:40px;">
+    🏛️ 경매 Council · 2025타경580 분석보고서 · 생성일 2026-07-09
+  </div>
+
+</div>
+
+<div class="site-footer">본 보고서는 투자 참고용이며, 최종 입찰 결정과 그 결과에 대한 책임은 투자자 본인에게 있습니다.</div>
+
+</body>
+</html>

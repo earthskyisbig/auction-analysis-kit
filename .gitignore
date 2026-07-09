@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[oc]
+.venv/
+# 환경변수(비밀)
+.env
+# 수집/분석 산출물 (예시 제외)
+*.csv
+*.duckdb
+case_*.json
+*.WARNING.txt
+# 예시 보고서는 추적, 그 외 생성 보고서는 무시
+report-*.html
+!examples/*.html
+!templates/report-template.html
