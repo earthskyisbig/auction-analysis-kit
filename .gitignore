@@ -11,6 +11,9 @@ case_*.json
 *.WARNING.txt
 # 분석 작업 산출물 폴더 (세션별 결과·임시 스크립트)
 out_*/
+# 웹앱 작업/캐시 (실거래 DuckDB 캐시·잡 산출물)
+webapp/_work/
+webapp/*.duckdb
 # 예시 보고서는 추적, 그 외 생성 보고서는 무시
 report-*.html
 !examples/*.html
