@@ -60,7 +60,9 @@ auction-analysis-kit/
 │       ├── location-metrics/     ③ 입지 정량지표 (카카오: 교통·직주·학군·인프라)
 │       ├── apt-value/            ④' 단지 스펙·가치 (공동주택 기본정보 API: 연식·세대수·동수·최고층 / 동·층·평형별 실거래)
 │       ├── profit-analysis/      ④ 수익성 (실거래+8대비용, 단지스펙 보강)
-│       └── report-builder/       ⑤ 종합보고서 HTML + 배포
+│       ├── report-builder/       ⑤ 종합보고서 HTML + 배포
+│       └── auction-screening/    ★ 3조건 퍼널 스크리닝 워크플로 (1→2→3조건→비교)
+├── webapp/                        로컬 Flask 웹앱 (퍼널 UI, auction-screening 실행체)
 ├── scripts/analyze_case.py       공용: 단일사건 상세수집
 ├── knowledge/                    세금·권리 지식베이스
 ├── templates/report-template.html 보고서 디자인 뼈대

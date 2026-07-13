@@ -153,11 +153,16 @@ def stage2(job, p):
         area = _won_area(r.get('전용면적'))
         trades = []
         if code and area:
-            kw = _norm(it.get('kaptName')).replace('아파트', '')[:6]
+            kw = _norm(it.get('kaptName')).replace('아파트', '')
             trades = rp.trades_for(code, kw, area)
-        r['실거래건'] = len(trades)
+        r['실거래건'] = len(trades)                       # 해당 평형±3㎡ 최근 12개월 매매건
         r['시세'] = int(st.median(trades)) if trades else 0
-        if hh >= p['hh_min'] and yr >= p['year_min'] and len(trades) >= 1:
+        monthly = len(trades) / 12.0                        # 월평균 실거래(환금성)
+        req = p['liq_per500'] * (hh / 500.0)                # 세대수 비례 요구치(500세대당 월 N건)
+        r['월거래'] = round(monthly, 2); r['요구월거래'] = round(req, 2)
+        liquid = monthly >= req
+        r['환금성'] = 'OK' if liquid else f'부족({monthly:.1f}<{req:.1f}/월)'
+        if hh >= p['hh_min'] and yr >= p['year_min'] and liquid:
             passed.append(r)
         job['s2_count'] = len(passed)
     job['s2'] = passed

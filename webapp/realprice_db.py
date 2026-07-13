@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """실거래 DuckDB 캐시 — 시군구·월 단위로 PublicDataReader에서 받아 저장·재사용.
 2조건(실거래 존재·시세)을 빠르게 판정하기 위한 로컬 캐시."""
-import os, warnings, datetime, threading
+import os, re, warnings, datetime, threading
 warnings.filterwarnings('ignore')
 import duckdb
 from dotenv import load_dotenv
@@ -79,11 +79,16 @@ def ensure(sigungu, months=None):
                 con.executemany("INSERT INTO trades VALUES (?,?,?,?,?,?,?)", rows)
             con.execute("INSERT INTO fetched VALUES (?,?)", [sigungu, ym])
 
+def _norm(s): return re.sub(r'[^0-9가-힣]', '', str(s or ''))
+
 def trades_for(sigungu, apt_kw, area, tol=3.0):
-    """단지 키워드 + 전용±tol 실거래 리스트(금액원). 캐시 자동 채움."""
+    """단지명 정규화 매칭 + 전용±tol 실거래 리스트(금액원). 캐시 자동 채움.
+    등록명 공백·접두 차이(예: '원곡 제일 오투그란데')를 흡수하려 정규화 후 부분일치."""
     ensure(sigungu)
     with _lock, _con() as con:
         rows = con.execute(
-            "SELECT amount, floor, area FROM trades WHERE sigungu=? AND apt LIKE ? "
-            "AND abs(area-?)<=?", [sigungu, f'%{apt_kw}%', area, tol]).fetchall()
-    return [r[0] for r in rows]
+            "SELECT amount, apt FROM trades WHERE sigungu=? AND abs(area-?)<=?",
+            [sigungu, area, tol]).fetchall()
+    kw = _norm(apt_kw)
+    if not kw: return []
+    return [amt for amt, apt in rows if kw in _norm(apt) or _norm(apt) in kw]

@@ -34,14 +34,15 @@ def api_run():
         'price_min': num('price_min', 50000000), 'price_max': num('price_max', 900000000),
         'bid_days': num('bid_days', 14),
         'hh_min': num('hh_min', 500), 'year_min': num('year_min', 2005),
-        'top_n': num('top_n', 3),
+        'liq_per500': num('liq_per500', 1.0), 'top_n': num('top_n', 3),
     }
     job = new_job(p)
     return jsonify({'id': job['id']})
 
 def _slim(r):
     return {k: r.get(k) for k in ('사건번호','물건소재지','전용면적','감정가','최저가','저감율','유찰횟수',
-        '매각기일','단지명','세대수','준공','실거래건','시세','권리','인수','입지점수','입지축','수익','_court')}
+        '매각기일','단지명','세대수','준공','실거래건','월거래','요구월거래','환금성','시세','권리','인수',
+        '입지점수','입지축','수익','_court')}
 
 @app.get('/api/status/<jid>')
 def api_status(jid):
