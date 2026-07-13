@@ -9,6 +9,8 @@ __pycache__/
 *.duckdb
 case_*.json
 *.WARNING.txt
+# 분석 작업 산출물 폴더 (세션별 결과·임시 스크립트)
+out_*/
 # 예시 보고서는 추적, 그 외 생성 보고서는 무시
 report-*.html
 !examples/*.html
