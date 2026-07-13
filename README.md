@@ -13,14 +13,15 @@
 - [Claude Code](https://claude.com/claude-code) 설치
 - Python 3.10+
 - 국토부 실거래가 API 키 ([data.go.kr](https://www.data.go.kr) "아파트 매매 실거래가" 활용신청 → **디코딩키**) — 수익성 시세 조회용
+- (아파트 단지 스펙용) [data.go.kr](https://www.data.go.kr) **"공동주택 기본 정보제공 서비스"(15058453)** + **"공동주택 단지 목록제공 서비스"(15057332)** 활용신청 → 연식·세대수·동수·최고층 조회. 인증키는 계정당 1개라 위 실거래 키와 동일 값 사용 가능
 - 카카오 REST API 키 ([developers.kakao.com](https://developers.kakao.com) → REST 키, "카카오맵/로컬"+"카카오내비" 활성화) — 입지분석용
 
 ### 1) 설치
 ```bash
 git clone https://github.com/<사용자명>/auction-analysis-kit
 cd auction-analysis-kit
-pip install playwright duckdb && python -m playwright install chromium
-cp .env.example .env   # .env에 PUBLIC_DATA_API_KEY 입력 (시세 조회용)
+pip install playwright duckdb "PublicDataReader>=1.1.1" python-dotenv pandas requests && python -m playwright install chromium
+cp .env.example .env   # .env에 PUBLIC_DATA_API_KEY(시세) · PUBLIC_DATA_SERVICE_KEY(단지 스펙) 입력
 ```
 
 ### 2) Claude Code 실행 후 한 줄
@@ -57,7 +58,8 @@ auction-analysis-kit/
 │       ├── court-search/         ① 법원경매 크롤링 (collect_api.py)
 │       ├── rights-analysis/      ② 권리분석 (말소기준·대항력·인수)
 │       ├── location-metrics/     ③ 입지 정량지표 (카카오: 교통·직주·학군·인프라)
-│       ├── profit-analysis/      ④ 수익성 (실거래+8대비용)
+│       ├── apt-value/            ④' 단지 스펙·가치 (공동주택 기본정보 API: 연식·세대수·동수·최고층 / 동·층·평형별 실거래)
+│       ├── profit-analysis/      ④ 수익성 (실거래+8대비용, 단지스펙 보강)
 │       └── report-builder/       ⑤ 종합보고서 HTML + 배포
 ├── scripts/analyze_case.py       공용: 단일사건 상세수집
 ├── knowledge/                    세금·권리 지식베이스
@@ -72,7 +74,7 @@ auction-analysis-kit/
 | ① 크롤링 | court-search | 조건별 물건 목록 전량 수집(CSV) | collect_api.py (API 페이징·정합성검증) |
 | ② 권리분석 | rights-analysis | 명세서·현황·감정 수집→말소기준·인수 판정 | analyze_case.py |
 | ③ 입지분석 | location-metrics + location-analyst | 교통·직주·학군·인프라(코드) + 공급물량·호재(조사) → 6축 등급 | 카카오 로컬/모빌리티 + WebSearch |
-| ④ 수익성 | profit-analysis | 실거래 시세 + 8대 비용 손익 | real-estate MCP + 8대비용 규칙 |
+| ④ 수익성 | profit-analysis (+apt-value) | 실거래 시세 + **단지 스펙(연식·세대수·동수·최고층)** + 8대 비용 손익 | real-estate MCP + 공동주택 기본정보 API + 8대비용 규칙 |
 | ⑤ 보고서 | report-builder | 표준 HTML 보고서(입지 레이더 포함) + GitHub Pages 배포 | templates/ + examples/ |
 
 ## 왜 collect_api.py 인가 (중요)

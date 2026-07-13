@@ -1,6 +1,6 @@
 ---
 name: profit-analysis
-description: 경매 물건의 수익성 분석. 국토부 실거래가로 시세를 확정하고, 낙찰가 시나리오별로 8대 필수비용을 반영해 세전/세후 차익과 ROI를 계산한다. 사용자가 "수익률 계산", "얼마 남아?", "이 가격에 낙찰받으면", "실거래가 시세 확인", "매도차익" 등을 요청하면 이 스킬을 읽어라. rights-analysis(②) 통과 후 실행하는 3단계.
+description: 경매 물건의 수익성 분석. 국토부 실거래가로 시세를 확정하고, 공동주택 기본정보 API로 단지 스펙(연식·세대수·동수·최고층)을 보강하며, 낙찰가 시나리오별로 8대 필수비용을 반영해 세전/세후 차익과 ROI를 계산한다. 사용자가 "수익률 계산", "얼마 남아?", "이 가격에 낙찰받으면", "실거래가 시세 확인", "매도차익", "연식·세대수·단지 스펙" 등을 요청하면 이 스킬을 읽어라. rights-analysis(②) 통과 후 실행하는 3단계.
 ---
 
 # ③ 수익성 분석 (profit-analysis)
@@ -14,9 +14,34 @@ description: 경매 물건의 수익성 분석. 국토부 실거래가로 시세
 - 아파트: `mcp__real-estate__get_apartment_trades(region_code, year_month)`
 - 빌라/다세대: `mcp__real-estate__get_villa_trades(...)`
 - 지역코드: `mcp__real-estate__get_region_code("○○구 ○○동")` 먼저 호출
+- 🟡 **real-estate MCP가 없는 환경이면 `PublicDataReader`로 대체**(apt-value와 동일 스택, `.env`의
+  `PUBLIC_DATA_API_KEY`). 시군구별 최근 12개월을 모아 **단지명 포함 + 전용±3㎡** 로 거른다:
+  ```python
+  import PublicDataReader as pdr
+  api = pdr.TransactionPrice(KEY)
+  df = api.get_data(property_type='아파트', trade_type='매매',
+                    sigungu_code=코드, year_month='YYYYMM', verbose=False)  # verbose=True 금지(세그폴트)
+  # df['아파트'].str.contains(단지키워드) & (df['전용면적']-목표).abs()<=3 → 거래금액(만원)×10000
+  ```
+  ⚠️ 이름 필터가 **다른 단지(예: '가람마을4단지한양수자인' vs '파주한양수자인리버팰리스')를 섞을 수 있으니**
+  표본의 `단지명·법정동`을 확인해 대상 단지만 남겨라. 표본 3~5건 미만이면 "시세 신뢰 낮음" 명시.
 - **동일 단지 실거래가 최우선 근거.** 없으면 동일 읍면동·유사 면적·유사 연식으로.
 - 층 보정: 1층/최상층은 로열층 대비 -10~15% 반영. 이상치(단일 고가/저가)는 제외.
 - 시세는 **보수/중립/낙관 3단계**로 제시.
+
+### 1.5 단지 스펙 조회 (연식·세대수·동수·최고층) — apt-value
+경매 대상이 **아파트**면 `apt-value` 스킬의 `fetch_complex.py`로 단지 스펙을 뽑아 시세·수리비 판단의 근거로 삼는다. 실거래 시세는 위 1번(MCP) 그대로 쓰고, 여기서는 **단지 정보만** 보강한다.
+```bash
+python ../apt-value/scripts/fetch_complex.py --name <단지명> --district <시군구> --workdir aptspec_<단지명>
+# kaptCode를 알면:  --kapt-code A13586103 (목록 API 없이 바로)
+```
+`complex_profile.json` 생성 → **세대수·동수·준공연도·최고층·난방·복도유형·주차**. 활용에:
+- **연식**: 수리비(⑤) 산정 근거 — 구축일수록 인테리어/설비 비용 상향. 15㎡ 초과·85㎡ 이하 구축은 매매사업자 단기매도 1순위(도메인 규칙과 연결).
+- **세대수·동수**: 환금성 판단 — 대단지(1000세대+)일수록 매도 용이·시세 안정. 나홀로/소규모는 매도 리스크·시세 눌림 경고.
+- **최고층**: 경매 물건 층수를 최고층과 비교해 로열층/저층 보정(1번 층 보정)의 근거로.
+- 키는 `.env`의 `PUBLIC_DATA_SERVICE_KEY`(없으면 `PUBLIC_DATA_API_KEY` 폴백). 403이면 활용신청 안내하고 이 단계는 건너뛴 채 진행(리포트에 "단지 스펙 미조회" 명시).
+
+> 같은 단지에서 **동별·층별·평형별** 세밀한 가치 분해까지 필요하면 `apt-value` 전체 워크플로(fetch_complex → analyze_value → build_report)를 독립 실행한다. 파이프라인 기본은 스펙 보강까지만.
 
 ### 2. 예상 낙찰가 추정
 - 인근 동일 용도 평균 매각가율(analyze_case의 인근매각 데이터) 참고.
