@@ -1,0 +1,261 @@
+<title>경매 스크리닝 워크플로우 — 84건에서 5건까지</title>
+<style>
+  :root {
+    --bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#e9ecef;
+    --text:#212529; --text-secondary:#6c757d;
+    --accent:#3b82f6; --accent-light:#eff6ff;
+    --green:#16a34a; --green-light:#f0fdf4;
+    --red:#dc2626; --red-light:#fef2f2;
+    --yellow:#d97706; --yellow-light:#fffbeb;
+    --purple:#7c3aed; --purple-light:#f5f3ff;
+    --nav-bg:#1e293b; --nav-text:#f1f5f9;
+    --radius:14px; --radius-sm:8px;
+    --line:#cbd5e1;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0f1419; --surface:#171d25; --surface2:#1c242e; --border:#2a333f;
+      --text:#e6edf3; --text-secondary:#94a3b8;
+      --accent-light:#16233a; --green-light:#10231a; --red-light:#2a1618;
+      --yellow-light:#2a2010; --purple-light:#1e1832; --nav-bg:#060a0f; --line:#3b4653;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1419; --surface:#171d25; --surface2:#1c242e; --border:#2a333f;
+    --text:#e6edf3; --text-secondary:#94a3b8;
+    --accent-light:#16233a; --green-light:#10231a; --red-light:#2a1618;
+    --yellow-light:#2a2010; --purple-light:#1e1832; --nav-bg:#060a0f; --line:#3b4653;
+  }
+  :root[data-theme="light"]{
+    --bg:#ffffff; --surface:#f8f9fa; --surface2:#f1f3f5; --border:#e9ecef;
+    --text:#212529; --text-secondary:#6c757d;
+    --accent-light:#eff6ff; --green-light:#f0fdf4; --red-light:#fef2f2;
+    --yellow-light:#fffbeb; --purple-light:#f5f3ff; --nav-bg:#1e293b; --line:#cbd5e1;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans KR',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; font-size:15px;}
+  nav{background:var(--nav-bg); color:var(--nav-text); padding:0 24px; height:56px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.2);}
+  .nav-logo{font-size:16px; font-weight:700; display:flex; align-items:center; gap:6px;}
+  .nav-meta{font-size:12px; color:#94a3b8;}
+  .wrap{max-width:760px; margin:0 auto; padding:32px 20px 80px;}
+  .head{margin-bottom:26px;}
+  .eyebrow{display:inline-flex; align-items:center; gap:6px; background:var(--accent-light); color:var(--accent); font-size:12px; font-weight:600; padding:4px 12px; border-radius:20px; margin-bottom:12px;}
+  h1{font-size:24px; font-weight:800; line-height:1.35; text-wrap:balance;}
+  .sub{font-size:14px; color:var(--text-secondary); margin-top:8px;}
+
+  .flow{display:flex; flex-direction:column; align-items:stretch;}
+  .stage{position:relative;}
+
+  /* funnel width — each stage narrower */
+  .fbar{margin:0 auto; border-radius:var(--radius); padding:18px 22px; color:#fff; box-shadow:0 4px 16px rgba(0,0,0,.10);}
+  .fbar.s0{width:100%; background:linear-gradient(135deg,#334155,#475569);}
+  .fbar.s1{width:100%; background:linear-gradient(135deg,#1e3a8a,#3b82f6);}
+  .fbar.s2{width:82%; background:linear-gradient(135deg,#1e40af,#2563eb);}
+  .fbar.s3{width:64%; background:linear-gradient(135deg,#047857,#16a34a);}
+  .fbar.s4{width:50%; background:linear-gradient(135deg,#b45309,#d97706);}
+  @media(max-width:560px){ .fbar.s2,.fbar.s3,.fbar.s4{width:100%;} }
+
+  .fbar-top{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;}
+  .fbar-tag{font-size:11px; font-weight:700; letter-spacing:.4px; text-transform:uppercase; opacity:.85;}
+  .fbar-count{font-size:30px; font-weight:800; font-variant-numeric:tabular-nums; margin-left:auto;}
+  .fbar-title{font-size:15px; font-weight:700; margin-top:2px;}
+  .fbar-cond{font-size:12.5px; opacity:.92; margin-top:6px; line-height:1.55;}
+
+  /* connector between stages */
+  .conn{display:flex; flex-direction:column; align-items:center; padding:6px 0;}
+  .conn-line{width:2px; height:14px; background:var(--line);}
+  .conn-tool{display:inline-flex; align-items:center; gap:7px; background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:5px 13px; font-size:11.5px; color:var(--text-secondary); font-weight:600; white-space:nowrap;}
+  .conn-tool .dot{width:7px; height:7px; border-radius:50%; flex:0 0 auto;}
+  .dot-blue{background:var(--accent);} .dot-green{background:var(--green);} .dot-purple{background:var(--purple);} .dot-yellow{background:var(--yellow);}
+  .conn-arrow{color:var(--line); font-size:15px; line-height:1; margin-top:2px;}
+  .drop{font-size:11px; color:var(--red); font-weight:600; margin-top:4px;}
+
+  /* reject side-note */
+  .reject{font-size:11.5px; color:var(--text-secondary); background:var(--red-light); border:1px solid rgba(220,38,38,.25); border-radius:var(--radius-sm); padding:7px 12px; margin:8px auto 0; max-width:90%; text-align:center;}
+  .reject b{color:var(--red);}
+
+  /* final cards */
+  .final-head{text-align:center; margin:22px 0 14px;}
+  .final-head .fh-t{font-size:13px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.6px;}
+  .cards{display:grid; grid-template-columns:1fr; gap:8px;}
+  .rowcard{display:flex; align-items:center; gap:12px; border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 14px; background:var(--surface);}
+  .rc-rank{width:24px; height:24px; border-radius:7px; font-weight:800; font-size:12px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .g-B{background:var(--accent-light); color:var(--accent);} .g-C{background:var(--yellow-light); color:var(--yellow);} .g-D{background:var(--red-light); color:var(--red);}
+  .rc-name{font-weight:700; font-size:14px; flex:1 1 auto; min-width:0;}
+  .rc-name small{display:block; font-weight:400; color:var(--text-secondary); font-size:11.5px; margin-top:1px;}
+  .rc-metrics{display:flex; gap:12px; font-size:12px; color:var(--text-secondary); flex:0 0 auto; font-variant-numeric:tabular-nums;}
+  .rc-metrics b{color:var(--text); display:block; font-size:13px;}
+  .rc-metrics span{display:block; font-size:10px; text-transform:uppercase; letter-spacing:.4px;}
+  @media(max-width:560px){ .rc-metrics .m-hide{display:none;} }
+
+  .legend{display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:26px; padding-top:18px; border-top:1px solid var(--border); font-size:11.5px; color:var(--text-secondary);}
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .foot{margin-top:22px; font-size:11.5px; color:var(--text-secondary); text-align:center; line-height:1.7;}
+</style>
+
+<nav>
+  <span class="nav-logo">🏠 경매 스크리닝</span>
+  <span class="nav-meta">경기도 · 3조건 퍼널</span>
+</nav>
+
+<div class="wrap">
+  <header class="head">
+    <span class="eyebrow">WORKFLOW</span>
+    <h1>물건 필터링 → 최종 결과 워크플로우</h1>
+    <p class="sub">경기도 전역 아파트 경매를 4번의 관문으로 좁혀 5건까지. 각 관문은 <b>싸고 빠른 필터를 먼저</b> 걸어 뒤로 갈수록 느린 분석의 대상을 줄입니다.</p>
+  </header>
+
+  <div class="flow">
+
+    <!-- S0 입력 -->
+    <div class="stage">
+      <div class="fbar s0">
+        <div class="fbar-top">
+          <span class="fbar-tag">입력 · 대상</span>
+          <span class="fbar-count">경기 전역</span>
+        </div>
+        <div class="fbar-title">관할 10개 법원 전수</div>
+        <div class="fbar-cond">수원 · 성남 · 여주 · 평택 · 안산 · 안양 · 의정부 · 고양 · 남양주 · 부천</div>
+      </div>
+    </div>
+
+    <div class="conn">
+      <div class="conn-line"></div>
+      <div class="conn-tool"><span class="dot dot-blue"></span>court-search · 검색 API 페이징</div>
+      <div class="conn-arrow">▼</div>
+    </div>
+
+    <!-- S1 -->
+    <div class="stage">
+      <div class="fbar s1">
+        <div class="fbar-top">
+          <span class="fbar-tag">1조건 · 크롤링</span>
+          <span class="fbar-count">84</span>
+        </div>
+        <div class="fbar-title">아파트 · 유찰 · 면적 · 최저가</div>
+        <div class="fbar-cond">유찰 1~2회 · 전용 59~85㎡ · 최저매각가 1억~3억 &nbsp;→&nbsp; 서버필터로 84건 수집</div>
+      </div>
+    </div>
+
+    <div class="conn">
+      <div class="conn-line"></div>
+      <div class="conn-tool"><span class="dot dot-purple"></span>공동주택 API + 실거래 DuckDB</div>
+      <div class="conn-arrow">▼</div>
+      <div class="drop">− 75건 탈락</div>
+    </div>
+
+    <!-- S2 -->
+    <div class="stage">
+      <div class="fbar s2">
+        <div class="fbar-top">
+          <span class="fbar-tag">2조건 · 하드필터</span>
+          <span class="fbar-count">9</span>
+        </div>
+        <div class="fbar-title">세대수 · 연식 · 매도 환금성</div>
+        <div class="fbar-cond">500세대 이상 · 사용승인 2010년 이후 · <b>월 실거래 ≥ 세대수/500</b> (거래 없으면 탈락)</div>
+      </div>
+      <div class="reject">탈락 예시 — 세대·연식은 맞지만 <b>실거래 부족</b>으로 매도 불가 물건 다수 제거</div>
+    </div>
+
+    <div class="conn">
+      <div class="conn-line"></div>
+      <div class="conn-tool"><span class="dot dot-green"></span>rights-analysis · 명세서 자동수집</div>
+      <div class="conn-arrow">▼</div>
+      <div class="drop">저감율 상위 5건만 정밀 분석</div>
+    </div>
+
+    <!-- S3 -->
+    <div class="stage">
+      <div class="fbar s3">
+        <div class="fbar-top">
+          <span class="fbar-tag">3조건 · 권리</span>
+          <span class="fbar-count">5</span>
+        </div>
+        <div class="fbar-title">인수보증금 · 대항력 판정</div>
+        <div class="fbar-cond">매각물건명세서 구조화 필드로 판정 &nbsp;→&nbsp; <b>5건 전부 인수보증금 0원(안전)</b></div>
+      </div>
+    </div>
+
+    <div class="conn">
+      <div class="conn-line"></div>
+      <div class="conn-tool"><span class="dot dot-blue"></span>location-metrics 코드 4축</div>
+      <div class="conn-tool" style="margin-top:6px;"><span class="dot dot-yellow"></span>location-analyst 조사 2축 + 수익</div>
+      <div class="conn-arrow">▼</div>
+    </div>
+
+    <!-- S4 최종 -->
+    <div class="stage">
+      <div class="fbar s4">
+        <div class="fbar-top">
+          <span class="fbar-tag">최종 · 비교분석</span>
+          <span class="fbar-count">5</span>
+        </div>
+        <div class="fbar-title">입지 6축 · 실거래 시세 · 수익률</div>
+        <div class="fbar-cond">교통·직주·학군·공급·인프라·호재 6축 등급 + 8대비용 ROI &nbsp;→&nbsp; 순위 확정</div>
+      </div>
+    </div>
+
+    <!-- 결과물 -->
+    <div class="final-head"><span class="fh-t">▼ 최종 결과물 · 순위 5건</span></div>
+    <div class="cards">
+      <div class="rowcard">
+        <span class="rc-rank g-B">1</span>
+        <span class="rc-name">평택센트럴자이 2단지<small>851세대 · 2017 · 59.5㎡ · 최저 2.289억</small></span>
+        <span class="rc-metrics">
+          <span class="m-hide"><span>6축</span><b>56.9 B</b></span>
+          <span><span>ROI</span><b>28.8%</b></span>
+          <span><span>권리</span><b>안전</b></span>
+        </span>
+      </div>
+      <div class="rowcard">
+        <span class="rc-rank g-B">2</span>
+        <span class="rc-name">평택소사벌 호반베르디움<small>737세대 · 2018 · 84.2㎡ · 최저 2.863억</small></span>
+        <span class="rc-metrics">
+          <span class="m-hide"><span>6축</span><b>56.7 B</b></span>
+          <span><span>ROI</span><b>39.0%</b></span>
+          <span><span>권리</span><b>안전</b></span>
+        </span>
+      </div>
+      <div class="rowcard">
+        <span class="rc-rank g-B">3</span>
+        <span class="rc-name">평택센트럴자이 1단지<small>998세대 · 2017 · 59.5㎡ · 최저 2.632억</small></span>
+        <span class="rc-metrics">
+          <span class="m-hide"><span>6축</span><b>55.9 B</b></span>
+          <span><span>ROI</span><b>19.7%</b></span>
+          <span><span>권리</span><b>안전</b></span>
+        </span>
+      </div>
+      <div class="rowcard">
+        <span class="rc-rank g-C">4</span>
+        <span class="rc-name">지제역 동문 디 이스트 5단지<small>741세대 · 2024 · 85.0㎡ · 최저 2.835억 · 역 3.5km 주의</small></span>
+        <span class="rc-metrics">
+          <span class="m-hide"><span>6축</span><b>43.0 C</b></span>
+          <span><span>ROI</span><b>27.4%</b></span>
+          <span><span>권리</span><b>안전</b></span>
+        </span>
+      </div>
+      <div class="rowcard">
+        <span class="rc-rank g-D">5</span>
+        <span class="rc-name">안성원곡제일 오투그란데<small>797세대 · 2018 · 60.0㎡ · 최저 1.40억 · 환금성 하위</small></span>
+        <span class="rc-metrics">
+          <span class="m-hide"><span>6축</span><b>32.8 D</b></span>
+          <span><span>ROI</span><b>22.4%</b></span>
+          <span><span>권리</span><b>안전</b></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="dot dot-blue" style="width:9px;height:9px;border-radius:50%;"></span>크롤링·입지 코드</span>
+      <span><span class="dot dot-purple" style="width:9px;height:9px;border-radius:50%;"></span>공공API·실거래</span>
+      <span><span class="dot dot-green" style="width:9px;height:9px;border-radius:50%;"></span>권리분석</span>
+      <span><span class="dot dot-yellow" style="width:9px;height:9px;border-radius:50%;"></span>입지조사·수익</span>
+    </div>
+
+    <p class="foot">
+      너비가 좁아질수록 통과 물건이 줄어듭니다. 뒤 관문일수록 느리므로(권리분석 물건당 ~40초) 앞 관문에서 최대한 줄입니다.<br>
+      9건이 전부 저감율 70% 동률이라 상위 5건이 정렬 순서로 결정됐고 결과가 평택·안성에 쏠렸습니다 — 우열 아님. 모든 수치는 추정, 입찰 전 현장 검증 필수.
+    </p>
+
+  </div>
+</div>

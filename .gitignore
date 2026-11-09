@@ -18,3 +18,5 @@ webapp/*.duckdb
 report-*.html
 !examples/*.html
 !templates/report-template.html
+
+*.log
